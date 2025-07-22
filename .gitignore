@@ -1,0 +1,26 @@
+# 仮想環境
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# テスト・キャッシュ系
+.coverage
+.cache/
+.pytest_cache/
+
+# エディタ・OS系
+.DS_Store
+.vscode/
+.idea/
+
+# 依存ファイル（pip）
+requirements*.txt
+
+# ログなど
+*.log
+
+# Node.js
+node_modules/
+package-lock.json
+.env
