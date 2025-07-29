@@ -33,13 +33,12 @@ def lambda_handler(event, context, ses_client=None):
         logger.info(f"名前: {name}, メール: {email}, メッセージ: {message}")
 
         # メール内容
-        email_body = f"""
-        名前: {name}
+        email_body = f"""名前: {name}
         メールアドレス: {email}
 
         メッセージ:
         {message}
-        """
+        """.strip()
         logger.info("メールの本文を作成")
 
         # SES を使ったメール送信

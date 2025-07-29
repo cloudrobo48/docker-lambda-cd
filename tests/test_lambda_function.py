@@ -24,13 +24,15 @@ def test_lambda_handler():
             "Source": SES_SENDER,
             "Destination": {"ToAddresses": [SES_RECEIVER]},
             "Message": {
-                "Subject": {"Data": "問い合わせが届きました"},
+                "Subject": {"Data": "お問い合わせが届きました"},
                 "Body": {
                     "Text": {
                         "Data": (
                             "名前: onamae\n"
-                            "メール: test@emaail.com\n"
-                            "内容: めちゃ全力でやります！"
+                            "メールアドレス: test@emaail.com\n"
+                            "\n"
+                            "メッセージ:\n"
+                            "めちゃ全力でやります！"
                         )
                     }
                 },
