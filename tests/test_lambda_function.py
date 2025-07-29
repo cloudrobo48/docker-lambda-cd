@@ -26,7 +26,7 @@ def test_lambda_handler():
             {
                 "name": "onamae",
                 "email": SES_RECEIVER,
-                "message": "めちゃ全力でやります！！",
+                "message": "めちゃ全力でやります！",
             }
         )
     }
