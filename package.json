@@ -7,10 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "lint": "eslint src/",
+    "lint:js": "eslint \"src/**/*.{js,ts}\"",
+    "lint:py": "flake8 src/",
     "format:write": "prettier --write .",
     "format": "prettier --check . --ignore-path .prettierignore",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pytest"
   },
   "repository": {
     "type": "git",
@@ -25,8 +26,8 @@
   },
   "homepage": "https://github.com/cloudrobo48/docker-lambda-cd#readme",
   "devDependencies": {
-    "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.6.2"
+    "@eslint/js": "^9.31.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0"
   }
 }
