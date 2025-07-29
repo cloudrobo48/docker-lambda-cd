@@ -14,7 +14,7 @@ logger.setLevel(logging.DEBUG)  # ログレベルをDEBUGに設定
 logger.debug("Lambdaのデバッグログ開始")  # デバッグメッセージを追加
 
 
-def lambda_handler(event, context):
+def lambda_handler(event, context, ses_client=None):
     try:
         logger.info("Lambda関数が呼び出された")
 
@@ -43,10 +43,12 @@ def lambda_handler(event, context):
         logger.info("メールの本文を作成")
 
         # SES を使ったメール送信
-        client = boto3.client("ses", region_name=SES_REGION)
+        if ses_client is None:
+            ses_client = boto3.client("ses", region_name=SES_REGION)
+
         logger.info("SESクライアントを作成")
 
-        response = client.send_email(
+        response = ses_client.send_email(
             Source=SES_SENDER,
             Destination={"ToAddresses": [SES_RECEIVER]},
             Message={
