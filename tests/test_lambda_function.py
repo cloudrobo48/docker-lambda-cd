@@ -54,7 +54,8 @@ def test_lambda_handler():
     }
 
     # 実行 & レスポンス確認
-    response = lambda_function.lambda_handler(event, None)
+    response = lambda_function.lambda_handler(event, None, ses_client=ses_client)
+
     body = json.loads(response["body"])
 
     assert response["statusCode"] == 200

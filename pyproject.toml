@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 88
+target-version = ['py311']  # 使用してるPythonバージョンに合わせて
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]  # blackとの衝突を避けるための定番設定
