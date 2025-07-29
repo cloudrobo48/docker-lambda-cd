@@ -15,7 +15,7 @@ __pycache__/
 .idea/
 
 # 依存ファイル（pip）
-requirements*.txt
+# requirements*.txt
 
 # ログなど
 *.log
