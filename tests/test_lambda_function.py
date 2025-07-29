@@ -9,7 +9,7 @@ def test_lambda_handler():
             {
                 "name": "onamae",
                 "email": "onamae@example.com",
-                "message": "全力でやります！！",
+                "message": "めちゃ全力でやります！！",
             }
         )
     }
