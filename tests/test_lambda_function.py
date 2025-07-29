@@ -1,7 +1,7 @@
 import json
 
 import boto3
-from moto.ses import mock_ses
+from moto import mock_ses_deprecated
 
 from src import lambda_function
 
@@ -12,7 +12,7 @@ SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"  # 送信先メール
 SES_REGION = "ap-northeast-1"  # SESのリージョン
 
 
-@mock_ses
+@mock_ses_deprecated
 def test_lambda_handler():
     # SESモック空間を発生させる
     client = boto3.client("ses", region_name=SES_REGION)
