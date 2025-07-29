@@ -6,4 +6,4 @@ isort==5.12.0
 mypy==1.10.0
 coverage==7.4.4
 boto3==1.34.102
-moto==5.0.12 
+moto[ses]==5.0.12
