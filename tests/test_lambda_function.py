@@ -6,9 +6,9 @@ from botocore.stub import Stubber
 from src import lambda_function
 
 # Lambda側と同じ値を使う（DRYに保つ！）
-SES_SENDER = lambda_function.SES_SENDER
-SES_RECEIVER = lambda_function.SES_RECEIVER
-SES_REGION = lambda_function.SES_REGION
+SES_SENDER = "hata.kazuhiro@fieldwork48.com"  # SESで登録済みの送信元メール
+SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"  # 送信先メール
+SES_REGION = "ap-northeast-1"  # SESのリージョン
 
 
 def test_lambda_handler():
@@ -24,12 +24,12 @@ def test_lambda_handler():
             "Source": SES_SENDER,
             "Destination": {"ToAddresses": [SES_RECEIVER]},
             "Message": {
-                "Subject": {"Data": "お問い合わせありがとうございます"},
+                "Subject": {"Data": "問い合わせが届きました"},
                 "Body": {
                     "Text": {
                         "Data": (
                             "名前: onamae\n"
-                            "メール: hata.kazuhiro@fieldwork48.com\n"
+                            "メール: test@emaail.com\n"
                             "内容: めちゃ全力でやります！"
                         )
                     }
@@ -47,7 +47,7 @@ def test_lambda_handler():
         "body": json.dumps(
             {
                 "name": "onamae",
-                "email": SES_RECEIVER,
+                "email": "test@emaail.com",
                 "message": "めちゃ全力でやります！",
             }
         )
