@@ -29,10 +29,8 @@ def test_lambda_handler():
                     "Text": {
                         "Data": (
                             "名前: onamae\n"
-                            "メールアドレス: test@emaail.com\n"
-                            "\n"
-                            "メッセージ:\n"
-                            "めちゃ全力でやります！"
+                            "メールアドレス: test@emaail.com\n\n"
+                            "メッセージ:\nめちゃ全力でやります！"
                         )
                     }
                 },
