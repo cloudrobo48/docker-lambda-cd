@@ -24,9 +24,13 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Zip Lambda function
+      - name: Prepare deployment package
         run: |
-          zip -r function.zip .
+          mkdir -p build
+          cp src/*.py build/
+          cp requirements.txt build/
+          cd build
+          zip -r ../function.zip .
 
       - name: Deploy to AWS Lambda
         env:
