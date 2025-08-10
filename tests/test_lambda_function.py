@@ -7,7 +7,7 @@ from src import lambda_function
 
 # Lambda側と同じ値を使う（DRYに保つ！）
 SES_SENDER = "hata.kazuhiro@fieldwork48.com"  # SESで登録済みの送信元メール
-SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"  # 送信先メール
+SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"  # 送信先メールアドレス
 SES_REGION = "ap-northeast-1"  # SESのリージョン
 
 
