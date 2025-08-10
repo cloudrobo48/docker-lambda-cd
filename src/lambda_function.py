@@ -12,11 +12,13 @@ SES_REGION = "ap-northeast-1"  # SESのリージョン
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)  # ログレベルをDEBUGに設定
 logger.debug("Lambdaのデバッグログ開始")  # デバッグメッセージを追加
+logger.info("CI/CD Deploy Started in Global scope")
 
 
 def lambda_handler(event, context, ses_client=None):
     try:
         logger.info("Lambda関数が呼び出された")
+        logger.info("CI/CD Deploy Started in function scope")
 
         # API Gateway のリクエストボディを取得
         if "body" in event and event["body"]:
