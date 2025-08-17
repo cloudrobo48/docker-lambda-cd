@@ -16,9 +16,12 @@ logger.info("CI/CD Deploy Started in Global scope")
 
 
 def lambda_handler(event, context, ses_client=None):
+
     try:
         logger.info("Lambda関数が呼び出された")
         logger.info("CI/CD Deploy Started in function scope")
+
+        logger.info(f"HTTPメソッド: {event.get('httpMethod', '不明')}")
 
         # API Gateway のリクエストボディを取得
         if "body" in event and event["body"]:
