@@ -44,21 +44,22 @@ def test_lambda_handler():
 
     # Lambdaのeventを定義
     event = {
+        "requestContext": {"http": {"method": "POST"}},
         "body": json.dumps(
             {
                 "name": "onamae",
                 "email": "test@emaail.com",
                 "message": "めちゃ全力でやります！",
             }
-        )
+        ),
     }
 
     # 実行 & レスポンス確認
-    response = lambda_function.lambda_handler(event, None, ses_client=ses_client)
+    res = lambda_function.lambda_handler(event, None, ses_client=ses_client)
 
-    body = json.loads(response["body"])
+    body = json.loads(res["body"])
 
-    assert response["statusCode"] == 200
+    assert res["statusCode"] == 200
     assert body["message"] == "メール送信成功"
 
     stubber.deactivate()

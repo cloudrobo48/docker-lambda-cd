@@ -4,66 +4,93 @@ import logging
 import boto3
 
 # SES の設定
-SES_SENDER = "hata.kazuhiro@fieldwork48.com"  # SESで登録済みの送信元メール
-SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"  # 送信先メール
-SES_REGION = "ap-northeast-1"  # SESのリージョン
+SES_SENDER = "hata.kazuhiro@fieldwork48.com"
+SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"
+SES_REGION = "ap-northeast-1"
 
 # CloudWatch ログ設定
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)  # ログレベルをDEBUGに設定
-logger.debug("Lambdaのデバッグログ開始")  # デバッグメッセージを追加
+logger.setLevel(logging.DEBUG)
+logger.debug("Lambdaのデバッグログ開始")
 logger.info("CI/CD Deploy Started in Global scope")
 
 
 def lambda_handler(event, context, ses_client=None):
-
     try:
-        logger.info("Lambda関数が呼び出された")
+        method = (
+            event.get("requestContext", {}).get("http", {}).get("method", "UNKNOWN")
+        )  # noqa: E501
+        logger.info(f"Lambda関数が呼び出された - メソッド: {method}")
         logger.info("CI/CD Deploy Started in function scope")
 
-        logger.info(f"HTTPメソッド: {event.get('httpMethod', '不明')}")
+        # OPTIONS メソッドへの対応（CORSプリフライト）
+        if method == "OPTIONS":
+            logger.info("OPTIONSリクエストに対するCORSレスポンスを返します")
+            return {
+                "statusCode": 204,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                },
+                "body": "",
+            }
 
-        # API Gateway のリクエストボディを取得
-        if "body" in event and event["body"]:
-            body = json.loads(event["body"])
-        else:
-            body = {}
-        #        body = json.loads(event['body'])
-        logger.info(f"受信したリクエストデータ: {body}")
+        # POST メソッドへの対応（メール送信）
+        if method == "POST":
+            if "body" in event and event["body"]:
+                body = json.loads(event["body"])
+            else:
+                body = {}
 
-        name = body.get("name", "No Name")
-        email = body.get("email", "No Email")
-        message = body.get("message", "No Message")
+            logger.info(f"受信したリクエストデータ: {body}")
 
-        logger.info(f"名前: {name}, メール: {email}, メッセージ: {message}")
+            name = body.get("name", "No Name")
+            email = body.get("email", "No Email")
+            message = body.get("message", "No Message")
 
-        # メール内容
-        email_body = (
-            f"名前: {name}\n" f"メールアドレス: {email}\n\n" f"メッセージ:\n{message}"
-        )
+            logger.info(f"名前: {name}, メール: {email}, メッセージ: {message}")
 
-        logger.info(repr(email_body))
-        logger.info("メールの本文を作成")
+            email_body = (
+                f"名前: {name}\nメールアドレス: {email}\n\nメッセージ:\n{message}"
+            )
+            logger.info(repr(email_body))
+            logger.info("メールの本文を作成")
 
-        # SES を使ったメール送信
-        if ses_client is None:
-            ses_client = boto3.client("ses", region_name=SES_REGION)
+            if ses_client is None:
+                ses_client = boto3.client("ses", region_name=SES_REGION)
 
-        logger.info("SESクライアントを作成")
+            logger.info("SESクライアントを作成")
 
-        response = ses_client.send_email(
-            Source=SES_SENDER,
-            Destination={"ToAddresses": [SES_RECEIVER]},
-            Message={
-                "Subject": {"Data": "お問い合わせが届きました"},
-                "Body": {"Text": {"Data": email_body}},
-            },
-        )
+            response = ses_client.send_email(
+                Source=SES_SENDER,
+                Destination={"ToAddresses": [SES_RECEIVER]},
+                Message={
+                    "Subject": {"Data": "お問い合わせが届きました"},
+                    "Body": {"Text": {"Data": email_body}},
+                },
+            )
 
-        logger.info(f"メール送信レスポンス: {response}")
+            logger.info(f"メール送信レスポンス: {response}")
 
-        return {"statusCode": 200, "body": json.dumps({"message": "メール送信成功"})}
+            return {
+                "statusCode": 200,
+                "headers": {"Access-Control-Allow-Origin": "*"},
+                "body": json.dumps({"message": "メール送信成功"}),
+            }
+
+        # その他のメソッドは拒否
+        logger.warning(f"許可されていないHTTPメソッド: {method}")
+        return {
+            "statusCode": 405,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"error": "Method Not Allowed"}),
+        }
 
     except Exception as e:
-        logger.error(f"Lambda Error: {str(e)}")  # CloudWatchログへエラーメッセージ出力
-        return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
+        logger.error(f"Lambda Error: {str(e)}")
+        return {
+            "statusCode": 500,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"error": str(e)}),
+        }
