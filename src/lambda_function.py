@@ -3,12 +3,10 @@ import logging
 
 import boto3
 
-# SES の設定
 SES_SENDER = "hata.kazuhiro@fieldwork48.com"
 SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"
 SES_REGION = "ap-northeast-1"
 
-# CloudWatch ログ設定
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.debug("Lambdaのデバッグログ開始")
@@ -19,11 +17,10 @@ def lambda_handler(event, context, ses_client=None):
     try:
         method = (
             event.get("requestContext", {}).get("http", {}).get("method", "UNKNOWN")
-        )  # noqa: E501
+        )
         logger.info(f"Lambda関数が呼び出された - メソッド: {method}")
-        logger.info("CI/CD Deploy Started in function scope")
 
-        # OPTIONS メソッドへの対応（CORSプリフライト）
+        # OPTIONS リクエストへの対応（CORSプリフライト）
         if method == "OPTIONS":
             logger.info("OPTIONSリクエストに対するCORSレスポンスを返します")
             return {
@@ -36,7 +33,7 @@ def lambda_handler(event, context, ses_client=None):
                 "body": "",
             }
 
-        # POST メソッドへの対応（メール送信）
+        # POST リクエストへの対応（メール送信）
         if method == "POST":
             if "body" in event and event["body"]:
                 body = json.loads(event["body"])
@@ -54,7 +51,6 @@ def lambda_handler(event, context, ses_client=None):
             email_body = (
                 f"名前: {name}\nメールアドレス: {email}\n\nメッセージ:\n{message}"
             )
-            logger.info(repr(email_body))
             logger.info("メールの本文を作成")
 
             if ses_client is None:
