@@ -6,7 +6,6 @@ import boto3
 SES_SENDER = "hata.kazuhiro@fieldwork48.com"
 SES_RECEIVER = "hata.kazuhiro@fieldwork48.com"
 SES_REGION = "ap-northeast-1"
-ALLOWED_ORIGIN = "https://blog.fieldwork48.com"
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -27,7 +26,7 @@ def lambda_handler(event, context, ses_client=None):
             return {
                 "statusCode": 200,
                 "headers": {
-                    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+                    "Access-Control-Allow-Origin": "https://blog.fieldwork48.com",
                     "Access-Control-Allow-Methods": "POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type",
                     "Access-Control-Allow-Credentials": "true",
@@ -74,7 +73,7 @@ def lambda_handler(event, context, ses_client=None):
             return {
                 "statusCode": 200,
                 "headers": {
-                    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+                    "Access-Control-Allow-Origin": "https://blog.fieldwork48.com",
                     "Access-Control-Allow-Credentials": "true",
                 },
                 "body": json.dumps({"message": "メール送信成功"}),
@@ -84,7 +83,7 @@ def lambda_handler(event, context, ses_client=None):
         logger.warning(f"許可されていないHTTPメソッド: {method}")
         return {
             "statusCode": 405,
-            "headers": {"Access-Control-Allow-Origin": ALLOWED_ORIGIN},
+            "headers": {"Access-Control-Allow-Origin": "https://blog.fieldwork48.com"},
             "body": json.dumps({"error": "Method Not Allowed"}),
         }
 
@@ -92,6 +91,6 @@ def lambda_handler(event, context, ses_client=None):
         logger.error(f"Lambda Error: {str(e)}")
         return {
             "statusCode": 500,
-            "headers": {"Access-Control-Allow-Origin": ALLOWED_ORIGIN},
+            "headers": {"Access-Control-Allow-Origin": "https://blog.fieldwork48.com"},
             "body": json.dumps({"error": str(e)}),
         }
