@@ -24,7 +24,7 @@ def lambda_handler(event, context, ses_client=None):
         if method == "OPTIONS":
             logger.info("OPTIONSリクエストに対するCORSレスポンスを返します")
             return {
-                "statusCode": 204,
+                "statusCode": 200,
                 "headers": {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "POST, OPTIONS",
