@@ -10,6 +10,7 @@ SES_REGION = "ap-northeast-1"
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.debug("Lambdaのデバッグログ開始")
+logger.debug("LambdaのCD成功したらSlackへのカスタム通知を盛り込みました")
 logger.info("CI/CD Deploy Started in Global scope")
 
 

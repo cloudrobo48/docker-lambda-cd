@@ -42,3 +42,10 @@ jobs:
             --function-name send_email_notification \
             --zip-file fileb://function.zip \
             --region $AWS_REGION
+
+      - name: Notify Slack on Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ Lambdaへのデプロイが完了しました！"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
